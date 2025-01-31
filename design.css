@@ -1,0 +1,471 @@
+*{
+    padding:0px;
+    margin:0px;
+}
+
+
+
+
+
+
+nav{
+    padding:10px 10px;
+    height:100px;
+    background:rgb(255,255,255);
+    border:1px solid rgb(189, 187, 187);
+    
+    display:flex;
+    align-items: center;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    position:sticky;
+    top:0;
+    z-index:3;
+
+
+}
+
+#dropdown{
+    position:fixed;
+    padding-top:20px;
+    max-width:120px;
+    width:120px;
+height:130px;
+    max-height:130px;
+    font-weight:bold;
+    font-size:15px;
+    background:white;
+    top:10;
+    list-style-type:none;
+    left:10;
+    z-index:100;
+    display:none;
+}
+
+
+.rpadding{
+    padding-right:10px;
+} 
+
+#dropdown ul li{
+    list-style-type:none;
+}
+
+nav span{
+    padding:0px 10px;
+    vertical-align: middle;
+}
+
+#logoImage{
+    height:80px;
+}
+
+#dropuser{
+    font-weight:normal;
+    font-size:9px;
+    overflow:hidden;
+    width:90%;
+    padding-top:5px;
+    padding-bottom:8px;
+    margin-bottom:4px;
+    border-bottom:solid 1px #e99921;
+    
+    
+}
+
+.hoverb:hover{
+    color:#ca8218;
+}
+
+.pointercursor{
+cursor:pointer;
+}
+
+.transparent {
+    background:none;
+    border:none;
+}
+
+.tenpxpadded{
+    padding:10px;
+}
+
+.buttonpadded{
+    padding:10px 20px;
+}
+
+.leftalign{
+    margin-left:auto;
+}
+
+.nomargin{
+    margin:0px;
+}
+
+
+.rounded{
+    border-radius:25px;
+}
+
+.yellowbg{
+    background-color:#e99921;
+}
+.yellowtxt{
+    color:#e99921;
+}
+
+.noborder{
+border:none;
+}
+
+.whitetxt{
+    color:white;
+}
+
+
+.max25{
+    max-width:25%;
+}
+
+
+
+
+.max40{
+    max-width:40%;
+    width:fit-content;
+}
+
+.boldtxt{
+    font-weight:bold;
+}
+
+.yellowpress:active{
+    background-color:#ca8218;
+}
+
+.whitetextpress:active{
+    color:#d1d0ce;
+}
+
+#text2send{
+    display:flex;
+    flex-direction:row;
+    justify-content:end;
+    
+}
+
+#code2send{
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    
+}
+
+a{
+    padding:none;
+    margin:none;
+    text-decoration: none;
+}
+
+#txtbox{
+    margin-right:20px;
+    margin-left:10px;
+}
+
+#logo{
+    border-right:1px solid rgb(189, 187, 187);
+}
+
+.largefont{
+    font-size:24px;
+}
+
+#sidebar{
+    width:25vw;
+    background:rgb(255,255,255);
+    border:1px solid rgb(189, 187, 187);
+    padding-top:150px;
+    /*display:flex;*/
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    height:100vh;
+position:fixed;
+z-index:2;
+top:0;
+    
+}
+
+#searchbar{
+
+    width:80%;
+
+}
+
+.yellowborder{
+    border:solid;
+    border-color:#e99921;
+}
+
+.thinborder{
+    border:solid 1px;
+}
+
+input[type="search"] {
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+#searchbarwrapper{
+    width:100%;
+    align-items:center;
+    width:100%;
+    margin-left:10%;
+    height:12.5px;
+    justify-content:center;
+    margin-bottom:40px;
+
+}
+
+.groupslist{
+    display:block;
+    background-color:#f5f5f5;
+    padding:5px;
+    margin-top:20px;
+    width:90%;
+    margin-left:5px;
+}
+.groupslistname{
+    font-family:'Poppins', 'Arial Narrow', Arial, sans-serif;
+    font-size:20px;
+    padding-bottom:10px;
+    padding-top:2.5px;
+    border-bottom:1px solid #e99921;
+    
+}
+
+.groupslisttxt{
+    font-family:'Franklin Gothic', 'Arial Narrow', Arial, sans-serif;
+    padding:5px;
+}
+
+.groupslisttxt li{
+    font-family:inherit;
+    list-style-type:none;
+    padding:5px;
+}
+
+ul{
+    font-family:inherit;
+}
+
+.fivepxpadded{
+    padding:5px;
+}
+
+section{
+    padding:0px;
+    margin:0px;
+    
+}
+
+.invis{
+    display:none;
+}
+
+#pfpbutton{
+    font-size:24px;
+}
+
+#slogan{
+    width:100%;
+    margin:0px;
+    pointer-events:none;
+    box-shadow:0px 5px 20px 0px #707070;
+
+}
+
+#signupform{
+    margin:auto;
+    padding-top:10px;
+    
+}
+
+#signup{
+    padding:20px 40px;
+    font-size:20px;
+    border-radius:50px;
+}
+
+.circle{
+    border-radius:50px;
+}
+
+.typebar{
+    width:40vw;
+    height:30px;
+    /*margin-left:29vw;*/
+    margin-left:10px;
+    padding-left:30px;
+}
+
+.centeredcontent{
+    display:flex;
+    align-content: center;
+}
+
+
+.overlay{
+    position:fixed;
+    display:none;
+    top:0;
+    left:0;
+    height:100%;
+    z-index:3;
+    width:100%;
+    background:rgba(0,0,0,0.25);
+}
+
+#termsform{
+    margin:0px;
+    margin-top:-40px;
+    padding:0px;
+    height:0px;
+}
+.popup{
+    display:none;
+    position:fixed;
+    font-size:24px;
+    top:25vh;
+    left:37.5vw;
+    width:25vw;
+    height:57vh;
+    z-index:4;
+    background-color:white;
+    box-shadow:0px 0px 50px 0px black;
+    font-family:'Poppins', 'Arial Narrow', Arial, sans-serif;
+}
+
+.thirtypxpadded{
+    padding:30px;
+}
+.bottomborder{
+    border-left:none;
+    border-right:none;
+    border-top:none;
+}
+
+
+#usernameinput{
+    border:1px solid #e99921;
+    width:90%;
+    
+}
+
+#passwordinput{
+    
+        border:1px solid #e99921;
+        width:90%;
+        
+    }
+
+
+
+
+    label{
+        font-size:10px;
+
+    }
+
+#confirmlogin{
+    margin-top:10px;
+    margin-left:0 auto;
+}
+
+.tenpxmargin{
+    margin:10px;
+}
+
+
+.txtfont{
+    font-family:'Poppins', 'Arial Narrow', Arial, sans-serif;
+}
+
+.lmargin{
+    margin-left:30px;
+}
+.rmargin{
+    margin-right:30px;
+}
+
+
+.chat{
+cursor:pointer;
+}
+
+.rightalign{
+margin-left:auto;
+
+}
+
+#pagecontent{
+    display:flex;
+    flex-direction:column;
+   /*background:red;*/
+   margin-left:25vw;
+
+  
+}
+
+.yellowbold{
+    color:#ca8218;
+    font-weight:bold;
+}
+
+.debug{
+    background-color:red;
+ 
+}
+
+.rightalignt{
+    text-align:right;
+}
+
+.smalltxt{
+    font-size:10px;
+}
+
+.greytxt{
+    color:#707070;
+}
+
+.footersend{
+    position:fixed;
+    width:72.5vw;
+    height:70px;
+    left:25vw;
+    top:calc(100vh - 70px);
+    z-index:-1;
+    border-color:#a09f9f;
+    box-shadow:0px 0px 20px 0px rgba(0,0,0,0.25);
+    
+}
+
+.back{
+    z-index:-5;
+
+}
+
+#typeform{
+    display:flex;
+}
+
+.untouchable{
+ pointer-events:none;
+}
+
+.forward1{
+    z-index:1;
+}
+
+.whitebg{
+    background-color:white;
+}
