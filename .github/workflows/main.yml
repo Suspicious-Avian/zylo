@@ -1,1 +1,24 @@
+name: Inject Secret into Existing HTML
 
+on: [push]
+
+jobs:
+  update-html:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Replace Placeholder with Secret
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+        run: |
+          sed -i 's|<!-- SECRET_PLACEHOLDER -->|'"apikey"'|g' index.html
+
+      - name: Commit Updated HTML
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add index.html
+          git commit -m "Injected secret into index.html"
+          git push
