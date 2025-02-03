@@ -1,4 +1,6 @@
 name: Inject Secret into Existing HTML
+permissions:
+  contents: write
 
 on: [push]
 
