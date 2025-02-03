@@ -358,97 +358,44 @@ function checklogin(){
     
 
 }
+function loadchats(chats) {
+    getCloudVariable('messages', (chatslist) => {
+        chatlist = chatslist;
 
-function loadchats(chats){
+        chatslist.forEach(chat => {
+            let chatID = chat[0]; 
+            let messages = chat[1][1][1]; 
+            let messageCount = messages.length;
 
-  
-
-    getCloudVariable('messages',(chatslist) => {
-
-      chatlist = chatslist;
-
-      
-     
-      chatslist.forEach(chat => {
-        let chatID = chat[0]; 
-        let messages = chat[1][1][1]; 
-        let messageCount = messages.length;
-
-     if (lastMessageCounts.length<chatslist.length){
-      while(lastMessageCounts<=chatslist.length){
-        lastMessageCounts.push(0);
-      }
-     }
-        if (!(chatID in lastMessageCounts)) {
-            lastMessageCounts[chatID] = messageCount; 
-        }
-    });
-       
-        getCloudVariable('messages', (updatedChats) => {
-            updatedChats.forEach(chat => {
-                let chatID = chat[0]; 
-                let messages = chat[1][1][1];
-                let messageCount = messages.length;
-
-                if (messageCount > lastMessageCounts[chatID]) {
-                    // New messages detected
-                    console.log("New message received:", messages[messageCount - 1]);
-
-                 
-                    if (Notification.permission === "granted") {
-                        new Notification("New message!", { body: messages[messageCount - 1][3] });
-                    }
-
-                    lastMessageCounts[chatID] = messageCount; // Update count
-                }
-            });
-        });
-
-
-      for (i=0;i<chatslist.length;i++){
-        lastseenmessage.push(0);
-      }
-       // console.log(chats)
-      // console.log('chatslist',chatslist)
-   // console.log(chatslist);
-   let allgone = false;
-while(allgone!=true){
-   const groupsList = document.querySelector('.groupslist');
-    if (groupsList) {
-        groupsList.remove(); // Removes the entire element from the DOM
-        console.log('Groups list deleted.');
-    } else {
-        console.log('Groups list not found.');
-        allgone = true;
-    }}
-
-for(j=0;j<chats.length;j++){
-    for(let i=0; i<chatslist.length;i++){
-        if (chatslist[i][0]==chats[j]){
-       // console.log(
-            //chatslist[i][1][0],':Group name')//groupname
-
-            for(let l=1;l<chatslist[i][1].length;l++){
-          // console.log(chatslist[i][l][1][0],':Page Type',//pagetype
-           // chatslist[i][l][1][1][0],":Chat name")//chatname
-
-            for(let k=1;k<chatslist[i][l][1][1].length;k++){
-                //console.log(chatslist[i][l][1][1][k],':message item')
+           //only if new
+            if (!(chatID in lastMessageCounts)) {
+                lastMessageCounts[chatID] = messageCount;
             }
-            createGroup(chatslist[i][l][1],chatslist[i][l][0],chats[j])
-            console.log(chatslist[i][l][1][1].length,"chat length")
-        }
-    }}}
+        });
+interval
+        setInterval(() => {
+            getCloudVariable('messages', (updatedChats) => {
+                updatedChats.forEach(chat => {
+                    let chatID = chat[0];
+                    let messages = chat[1][1][1];
+                    let messageCount = messages.length;
 
-    items = document.querySelectorAll('.chat');
+                    if (messageCount > (lastMessageCounts[chatID] || 0)) {
+                        let newMessage = messages[messageCount - 1];
 
-    // Loop through each item and add the click event listener
-    items.forEach(item => {
-      item.addEventListener('click', openChat);
-    });    
+                        console.log("New message received:", newMessage);
 
-})
+                        // Ensure Notification API is available and permission is granted
+                        if (Notification.permission === "granted") {
+                            new Notification("New message!", { body: newMessage[3] || "New chat message!" });
+                        }
 
+                        lastMessageCounts[chatID] = messageCount; // Update last message count
+                    }
+                });
+            });
+        }, 5000); // 5s
+    });
 }
 
 function createGroup(items,gn,number,cat){
