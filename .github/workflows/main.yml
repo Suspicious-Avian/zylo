@@ -11,14 +11,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Secure Debugging (Mask Secret)
+        env:
+          MY_SECRET: ${{ secrets.APIKEY }}
+        run: |
+          echo "::add-mask::$MY_SECRET"  
+          echo "✅ Secret is set but hidden in logs!"
+
       - name: Replace Placeholder with Secret
         env:
           MY_SECRET: ${{ secrets.APIKEY }}
         run: |
-          sed -i "s|<!-- SECRET_PLACEHOLDER -->|$MY_SECRET|g" index.html
+          ESCAPED_SECRET=$(printf '%s\n' "$MY_SECRET" | sed 's/[&/\]/\\&/g')
+          sed -i "s|<!-- SECRET_PLACEHOLDER -->|$ESCAPED_SECRET|g" index.html
 
-      - name: Debug File Changes
-        run: cat index.html | grep "SECRET" || echo "No secret found"
+      - name: Check If Secret Was Replaced (Without Leaking)
+        run: |
+          if grep -q "SECRET_PLACEHOLDER" index.html; then
+            echo "❌ Secret was NOT replaced!";
+            exit 1;
+          else
+            echo "✅ Secret replaced successfully (Value is hidden)";
+          fi
 
       - name: Commit Updated HTML
         run: |
