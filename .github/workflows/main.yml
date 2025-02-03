@@ -15,12 +15,15 @@ jobs:
         env:
           MY_SECRET: ${{ secrets.APIKEY }}
         run: |
-          sed -i 's|<!-- SECRET_PLACEHOLDER -->|$MY_SECRET|g' index.html
+          sed -i "s|<!-- SECRET_PLACEHOLDER -->|$MY_SECRET|g" index.html
+
+      - name: Debug File Changes
+        run: cat index.html | grep "SECRET" || echo "No secret found"
 
       - name: Commit Updated HTML
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add index.html
-          git commit -m "Injected secret into index.html"
+          git diff --cached --quiet || git commit -m "Injected secret into index.html"
           git push
