@@ -1,7 +1,11 @@
 let match = 0;
 let wp = 0;
 let user;
+let chatlist;
+
+let visib = false;
 let userchats, userid;
+let lastseenmessage = [];
 
 let item;
 let currentchat;
@@ -21,7 +25,7 @@ function updateCloudVariable(value) {
       let value = snapshot.val();
     
       callback(value);
-      console.log(value)
+      //console.log(value)
     });
   }
   
@@ -43,6 +47,14 @@ function updateCloudVariable(value) {
 
 
   function setup() {
+
+    if (Notification.permission != true){
+
+    Notification.requestPermission().then(function (permission) {
+
+      console.log(permission);
+  
+  });}
     
     document.getElementById("loginbutton").addEventListener("click", toLogin);
    document.getElementById("loginoverlay").addEventListener("click", hideLogin);
@@ -53,6 +65,7 @@ function updateCloudVariable(value) {
    document.getElementById("profilebutton").addEventListener("click", profile);
    document.getElementById("settingsbutton").addEventListener("click", settings); 
    document.getElementById("logoutbutton").addEventListener("click", logout);
+   visib = !document.hidden
 
 
 
@@ -148,13 +161,36 @@ location.reload();
   function draw() {
     let dropd = document.getElementById('dropdown');
     let displayvalue = window.getComputedStyle(dropd).display;
+
+
    // console.log(dropd);
     if(displayvalue!='none'){
     
      placedropdown();
     }
+
+  //console.log(document.hidden)
+
+if(visib == true){
+  
+
+ //console.log(chatlist,'chatslistig',currentchat,'currentchat',currentchat[0][1],'currentchatsub')
+ 
+if(chatlist && currentchat){
+  lastseenmessage[currentchat] = chatlist[currentchat[0][1]][1][1][1].length ;
+  //console.log(chatlist[currentchat[0][1]][1][1][1],'currentchatlength',currentchat[1],'cc')
+}
+
+}
+
   }
 
+  document.addEventListener("visibilitychange", () => {
+    console.log("Vis:", !document.hidden);
+    visib = !document.hidden;
+
+
+});
 
   function setCloud(){
     
@@ -181,7 +217,7 @@ location.reload();
     getCloudVariable('messages', (cloudvar) => {
         for(i=0;i<cloudvar.length;i++){
             for(j=0;j<cloudvar[i].length;j++){
-                console.log("Cloud Variable value: ", cloudvar[i][j]); // Log the retrieved value}
+                //console.log("Cloud Variable value: ", cloudvar[i][j]); // Log the retrieved value}
                   }
 
               }
@@ -242,7 +278,7 @@ window.getdata(refpath).then((snapshot) => {
   
     
     currentArray.push([usern,passw,[0]]);
-    console.log(`${currentArray.length} is the number of accounts and the array is`, currentArray);
+   // console.log(`${currentArray.length} is the number of accounts and the array is`, currentArray);
   
     let refpath = window.ref(window.database, `Accounts/`); 
     window.firebaseSet(refpath, currentArray);
@@ -322,8 +358,42 @@ function checklogin(){
 }
 
 function loadchats(chats){
+
+  
+
     getCloudVariable('messages',(chatslist) => {
+
+      chatlist = chatslist;
+
+      getCloudVariable('messages', (updatedChatList) => {
+        for (let i = 0; i < updatedChatList.length; i++) {
+            let chatGroup = updatedChatList[i]; 
+            let chatMessages = chatGroup[1][1][1]; // Assuming messages are stored here
+    
+            if (lastseenmessage[i] < chatMessages.length) {
+                // Find and log only the new messages
+                for (let j = lastseenmessage[i]; j < chatMessages.length; j++) {
+                  let title = `${chatMessages[j][0]}`;
+
+                  let icon = 'zlogonotif.png';
+                  
+                  let body = `${chatMessages[j][3]}`;
+                  
+                  var notification = new Notification(title, { body, icon });
+                  console.log(notification)
+                }
+    
+                // Update the last seen message count
+                lastseenmessage[i] = chatMessages.length;
+            }
+        }
+    });
+
+      for (i=0;i<chatslist.length;i++){
+        lastseenmessage.push(0);
+      }
        // console.log(chats)
+      // console.log('chatslist',chatslist)
    // console.log(chatslist);
    let allgone = false;
 while(allgone!=true){
@@ -339,17 +409,18 @@ while(allgone!=true){
 for(j=0;j<chats.length;j++){
     for(let i=0; i<chatslist.length;i++){
         if (chatslist[i][0]==chats[j]){
-        console.log(
-            chatslist[i][1][0],':Group name')//groupname
+       // console.log(
+            //chatslist[i][1][0],':Group name')//groupname
 
             for(let l=1;l<chatslist[i][1].length;l++){
-           console.log(chatslist[i][l][1][0],':Page Type',//pagetype
-            chatslist[i][l][1][1][0],":Chat name")//chatname
+          // console.log(chatslist[i][l][1][0],':Page Type',//pagetype
+           // chatslist[i][l][1][1][0],":Chat name")//chatname
 
             for(let k=1;k<chatslist[i][l][1][1].length;k++){
-                console.log(chatslist[i][l][1][1][k],':message item')
+                //console.log(chatslist[i][l][1][1][k],':message item')
             }
             createGroup(chatslist[i][l][1],chatslist[i][l][0],chats[j])
+            console.log(chatslist[i][l][1][1].length,"chat length")
         }
     }}}
 
@@ -385,7 +456,7 @@ const ulElement = document.createElement('ul');
 
 // Loop through the array 'items' and create li elements
 items.forEach((item, i) => {
-    console.log(item+'ACKKK'+items);
+   // console.log(item+'ACKKK'+items);
     if(i/2 != round(i/2)){
     const liElement = document.createElement('li');
     const iElement = document.createElement('i');
@@ -444,6 +515,7 @@ function dropdown(){
 }
 
 function openChat(event) {
+  
     //console.log('YOLO'); 
     currentmessages = []; 
     loadsendingcap();
@@ -465,6 +537,9 @@ chatslist = [];
 
     
     getCloudVariable('messages',(chatslist) => {
+
+      //console.log('successfully got CV');
+    //  console.log(chatslist[currentchat][1][1][1].length,"chat length");
         let messagelist = [];
         var mholders = [];
 for(i=1;i<chatslist[item[0][1]][1][1][item[0][0]].length;i++){
@@ -477,7 +552,7 @@ for(i=1;i<chatslist[item[0][1]][1][1][item[0][0]].length;i++){
         messageitem.classList.add('rounded','yellowbg','max40','buttonpadded','whitetxt','txtfont');
        
         usertext.innerHTML = chatslist[item[0][1]][1][1][item[0][0]][i][0];
-        console.log(usertext);
+        //console.log(usertext);
         usertext.classList.add('txtfont','smalltxt','greytxt','tenpxmargin');
        
 
@@ -485,11 +560,11 @@ for(i=1;i<chatslist[item[0][1]][1][1][item[0][0]].length;i++){
         if (chatslist[item[0][1]][1][1][item[0][0]][i][0]!=user){
             messageitem.classList.add('lmargin');
             usertext.classList.add('lmargin')
-            console.log(user+'A'+chatslist[item[0][1]][1][1][item[0][0]][i][0]);
+          //  console.log(user+'A'+chatslist[item[0][1]][1][1][item[0][0]][i][0]);
             }else{
                 messageitem.classList.add('rmargin','rightalign')
                 usertext.classList.add('rmargin','rightalignt')
-                console.log(user+'B'+chatslist[item[0][1]][1][1][item[0][0]][i][0])
+            //    console.log(user+'B'+chatslist[item[0][1]][1][1][item[0][0]][i][0])
             }
             
 
@@ -518,10 +593,12 @@ for(i=1;i<chatslist[item[0][1]][1][1][item[0][0]].length;i++){
 
         mholders[i].appendChild(messagelist[i])
         textbox.appendChild(mholders[i])
-        console.log(mholders[i]);
+       // console.log(mholders[i]);
        }
+
  
     }
+    
     
     
 )
@@ -595,11 +672,11 @@ drop.style.left = `${rect.left-parseFloat(window.getComputedStyle(document.getEl
 function addserverperms(event){
   event.preventDefault();
   let toempty = document.getElementById('codetxtbox');
-  console.log(user,'user',userchats,'chats')
+ // console.log(user,'user',userchats,'chats')
   //THE GOAL:
   //to add to the userchats list the chat's id.
   userchats.push(toempty.value);
-  console.log(userchats)
+  //console.log(userchats)
   loadchats(userchats);
 
 
@@ -696,15 +773,15 @@ function sendmsg(event){
         // Fetch the existing messages first
         getCloudVariable('messages', chatslist => {
             // Access the correct location using currentchat
-            console.log('currentchat:', currentchat[0]);
+            //console.log('currentchat:', currentchat[0]);
             
             // Construct the correct Firebase reference path
             const refPath = window.ref(window.database, `messages/${currentchat[0][1]}/1/1/${currentchat[0][0]}/`);
-            console.log("Reference Path attempt: ", refPath._path);
+           // console.log("Reference Path attempt: ", refPath._path);
             
             // Get the message from the text input
             let msg = document.getElementById('txtbox').value; 
-            console.log(`msg:${msg}`);
+           // console.log(`msg:${msg}`);
             let msgdata = [];
 
             let timee = getCurrentTime()
