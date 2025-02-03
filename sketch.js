@@ -372,7 +372,7 @@ function loadchats(chats) {
                 lastMessageCounts[chatID] = messageCount;
             }
         });
-interval
+//interval
         setInterval(() => {
             getCloudVariable('messages', (updatedChats) => {
                 updatedChats.forEach(chat => {
