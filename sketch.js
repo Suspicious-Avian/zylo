@@ -365,24 +365,34 @@ function loadchats(chats){
 
       chatlist = chatslist;
 
-        for (let i = 0; i < chatslist.length; i++) {
-            if (!lastMessageCounts[chatslist[i][0]]) {
-                lastMessageCounts[chatslist[i][0]] = chatslist[i][1][1][1].length; // Store initial count
-            }
-        }
+      
+     
+      chatslist.forEach(chat => {
+        let chatID = chat[0]; 
+        let messages = chat[1][1][1]; 
+        let messageCount = messages.length;
 
-        // Attach a listener to detect new messages
+     if (lastMessageCounts.length<chatslist.length){
+      while(lastMessageCounts<=chatslist.length){
+        lastMessageCounts.push(0);
+      }
+     }
+        if (!(chatID in lastMessageCounts)) {
+            lastMessageCounts[chatID] = messageCount; 
+        }
+    });
+       
         getCloudVariable('messages', (updatedChats) => {
             updatedChats.forEach(chat => {
-                let chatID = chat[0]; // Assuming the first element is the chat ID
-                let messages = chat[1][1][1]; // Path to messages array
+                let chatID = chat[0]; 
+                let messages = chat[1][1][1];
                 let messageCount = messages.length;
 
                 if (messageCount > lastMessageCounts[chatID]) {
                     // New messages detected
                     console.log("New message received:", messages[messageCount - 1]);
 
-                    // OPTIONAL: Send a notification
+                 
                     if (Notification.permission === "granted") {
                         new Notification("New message!", { body: messages[messageCount - 1][3] });
                     }
