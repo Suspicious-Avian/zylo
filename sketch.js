@@ -3,6 +3,8 @@ let wp = 0;
 let user;
 let chatlist;
 
+let lastMessageCounts = {};
+
 let visib = false;
 let userchats, userid;
 let lastseenmessage = [];
