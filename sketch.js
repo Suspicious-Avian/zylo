@@ -50,6 +50,9 @@ function updateCloudVariable(value) {
 
   function setup() {
 
+      if (!window.database) {
+    console.error("Firebase database is not initialized!");
+}
     if (Notification.permission != true){
 
     Notification.requestPermission().then(function (permission) {
