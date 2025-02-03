@@ -365,29 +365,33 @@ function loadchats(chats){
 
       chatlist = chatslist;
 
-      getCloudVariable('messages', (updatedChatList) => {
-        for (let i = 0; i < updatedChatList.length; i++) {
-            let chatGroup = updatedChatList[i]; 
-            let chatMessages = chatGroup[1][1][1]; // Assuming messages are stored here
-    
-            if (lastseenmessage[i] < chatMessages.length) {
-                // Find and log only the new messages
-                for (let j = lastseenmessage[i]; j < chatMessages.length; j++) {
-                  let title = `${chatMessages[j][0]}`;
-
-                  let icon = 'zlogonotif.png';
-                  
-                  let body = `${chatMessages[j][3]}`;
-                  
-                  var notification = new Notification(title, { body, icon });
-                  console.log(notification)
-                }
-    
-                // Update the last seen message count
-                lastseenmessage[i] = chatMessages.length;
+        for (let i = 0; i < chatslist.length; i++) {
+            if (!lastMessageCounts[chatslist[i][0]]) {
+                lastMessageCounts[chatslist[i][0]] = chatslist[i][1][1][1].length; // Store initial count
             }
         }
-    });
+
+        // Attach a listener to detect new messages
+        getCloudVariable('messages', (updatedChats) => {
+            updatedChats.forEach(chat => {
+                let chatID = chat[0]; // Assuming the first element is the chat ID
+                let messages = chat[1][1][1]; // Path to messages array
+                let messageCount = messages.length;
+
+                if (messageCount > lastMessageCounts[chatID]) {
+                    // New messages detected
+                    console.log("New message received:", messages[messageCount - 1]);
+
+                    // OPTIONAL: Send a notification
+                    if (Notification.permission === "granted") {
+                        new Notification("New message!", { body: messages[messageCount - 1][3] });
+                    }
+
+                    lastMessageCounts[chatID] = messageCount; // Update count
+                }
+            });
+        });
+
 
       for (i=0;i<chatslist.length;i++){
         lastseenmessage.push(0);
