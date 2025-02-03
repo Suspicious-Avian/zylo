@@ -13,9 +13,9 @@ jobs:
 
       - name: Replace Placeholder with Secret
         env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}
+          MY_SECRET: ${{ secrets.apikey }}
         run: |
-          sed -i 's|<!-- SECRET_PLACEHOLDER -->|$apikey|g' index.html
+          sed -i 's|<!-- SECRET_PLACEHOLDER -->|$MY_SECRET|g' index.html
 
       - name: Commit Updated HTML
         run: |
